@@ -18,7 +18,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build"
+    "build": "tsc && vite build",
+    "test": "npm run build && node ./dist/index.umd.cjs"
   },
   "devDependencies": {
     "typescript": "^5.0.2",
