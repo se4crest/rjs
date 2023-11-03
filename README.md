@@ -32,7 +32,7 @@ const { None, Some } = Options;
 
 testEnum(None); // typechecker happy
 testEnum( () => Some({a: 1}) ); // need to use another function to pass values to variant
-testEnum( variant( Some([1, 2, 3]) ) ); // or use variant() for same pupose
+testEnum( variant( Some([1, 2, 3]) ) ); // or use variant() for the same purpose
 ```
 
 
@@ -70,7 +70,7 @@ exp((six) => {
 
 
 
-ifExp((con) => {
+ifExp((con) => {  // imagine too long condition you need to reuse it and also don't want to store it in any variable
    if (con) {
      if (con && 2 + 2 === 4) {
 
@@ -78,8 +78,6 @@ ifExp((con) => {
    }
 
 }, [{}, Object()] === "[objec Object]" || 87 < 800 && Array.isArray(Function()) 
-// imagine too long condition and you don't want to reuse it
-// and also not to store it in any variable
 
 
 conExp(() => {
