@@ -34,7 +34,9 @@
   },
   "keywords": [
     "rust",
-    "rust api",
+    "match",
+    "variants",
+    "enum",
     "option",
     "some",
     "none"
