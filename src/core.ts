@@ -1,21 +1,57 @@
-import { Option, none } from "./option";
 
-export function exp<T, C>(expression: (value: Option<C>) => T, condition: Option<C> = none()) {
-  return expression(condition);
-}
+export * from "./core/expressions";
+export * from "./core/match";
+export * from "./core/option";
 
-export function conExp<T>(expression: () => T, condition: boolean) {
-  if (condition) {
-    return expression();
-  }
-}
+// export interface Option<T> {
+//   value: T
+//   unwrap(): T
+//   unwrapOr<V>(v: V): V
+//   unwrapOrElse<V>(exp: () => V): V
+// };
 
-export function valExp<V, T>(expression: (value: V) => T, value: V) {
-  return expression(value);
-}
+// class None implements Option<any> {
+//   constructor(readonly value: any = {
+//     __NULL__: {}
+//   }) {}
 
-export function ifExp<T>(expression: (condition: boolean) => T, condition: boolean) {
-  return expression(condition);
-}
+//   unwrap() {
+//     return this.value;
+//   }
 
-exp(() => {return});
+//   unwrapOr<V>(v: V): V {
+//     return v;
+//   }
+
+//   unwrapOrElse<V>(exp: () => V): V {
+//     return exp()
+//   }
+  
+// };
+
+// class Some<T> implements Option<T> {
+//   constructor(readonly value: T) {}
+
+//   unwrap(): T {
+//     return this.value;
+//   }
+
+//   unwrapOr<V>(v: V): V {
+//     return v;
+//   }
+
+//   unwrapOrElse<V>(exp: () => V): V {
+//     return exp()
+//   }
+// };
+
+
+// export function some<T>(value: T): Option<T> {
+//   return new Some<T>(value);
+// }
+
+// export function none<T>(): Option<T> {
+//   return new None();
+// }
+
+

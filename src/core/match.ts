@@ -1,20 +1,24 @@
+import { exp } from "./expressions";
 
-// interface MatchPair {}
+export function match<T>(value: T, expression: (value: T) => Array<[T, () => unknown]>, defaultExp: (value: T) => unknown): unknown {
 
-import { exp } from "./core";
-// import { some } from "./option";
+  const found = expression(value).find(([rhsValue]) => {
+    return matchExp(value, rhsValue, (result) => result === 1);
+  });
 
-// export function match<T>(value: T, arms: (value: T) => MatchPair) {
+  if (Array.isArray(found)) {
+    return found[1]();
+  }
 
-// }
+  return defaultExp(value);
+}
 
-// const _ = "_";
-// const x = 1;
 
-// match(x, () => [
-//   [ 2, 3, () => {} ],
-//   [ _, () => {} ],
-// ])
+export function matchExp<T, R>(lhsValue: T, rhsValue: T, exec: (result: number) => R): R {
+  const rsl = cmp(lhsValue, rhsValue);
+  
+  return exec(rsl);
+}
 
 
 export function cmp<T>(lhsValue: T, rhsValue: T) {

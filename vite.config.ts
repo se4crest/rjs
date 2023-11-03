@@ -4,14 +4,16 @@ import dts from "vite-plugin-dts";
 export default defineConfig({
   build: {
     lib: {
-      entry: "src/lib.ts",
+      entry: [
+        "src/common.ts",
+        "src/lib.ts"
+      ],
       name: "rjs",
-      fileName: "index"
+      fileName: (fmt, name) => fmt === "es" ? `${name}.js` : `${name}.umd.${fmt}`
     }
   },
   plugins: [
     dts({
-      insertTypesEntry: true,
       exclude: ["src/test.ts", "src/main.ts"]
     })
   ]
