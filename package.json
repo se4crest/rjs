@@ -1,6 +1,6 @@
 {
   "name": "@seacrest/rjs",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "types": "./dist/index.d.ts",
   "license": "UNLICENSED",
@@ -20,7 +20,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "test": "npm run build && node ./dist/index.umd.cjs"
+    "test": "npm run build && node ./dist/lib.umd.cjs"
   },
   "devDependencies": {
     "typescript": "^5.0.2",

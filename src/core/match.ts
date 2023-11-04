@@ -1,6 +1,6 @@
 import { exp } from "./expressions";
 
-export function match<T>(value: T, expression: (value: T) => Array<[T, () => unknown]>, defaultExp: (value: T) => unknown): unknown {
+export function match<V, T>(value: V, expression: (value: V) => Array<[V, () => T]>, defaultExp: (value: V) => T): T {
 
   const found = expression(value).find(([rhsValue]) => {
     return matchExp(value, rhsValue, (result) => result === 1);
@@ -56,6 +56,15 @@ export function cmp<T>(lhsValue: T, rhsValue: T) {
           } else { return -1 }
 
         } else {
+          
+            if (lhsValue === null && rhsValue === null) {
+              return 1;
+            }
+
+            if ((lhsValue === null && rhsValue !== null) || (lhsValue !== null && rhsValue === null)) {
+              return -1;
+            }
+          
             const lhsKeys = Object.keys(lhsValue!);
             const rhsKeys = Object.keys(rhsValue!);
       

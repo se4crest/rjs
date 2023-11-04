@@ -2,12 +2,12 @@
 export interface Option<T> {
   value: T
   unwrap(): T
-  unwrapOr(v: T): Option<T> | T
-  unwrapOrElse<V>(exp: () => V): V
+  unwrapOr(value: any): T
+  unwrapOrElse(exp: () => any): any
 };
 
-class None implements Option<any> {
-  constructor(readonly value: any = {
+class None<T> implements Option<any> {
+  constructor(readonly value: T | any = {
     __NULL__: {}
   }) {}
 
@@ -15,12 +15,12 @@ class None implements Option<any> {
     return this.value;
   }
 
-  unwrapOr<T>(v: T) {
-    return some(v);
+  unwrapOr<V>(value: V): V {
+    return value;
   }
 
-  unwrapOrElse<V>(exp: () => V): V {
-    return exp()
+  unwrapOrElse(exp: () => any) {
+    return exp();
   }
   
 };
@@ -28,16 +28,16 @@ class None implements Option<any> {
 class Some<T> implements Option<T> {
   constructor(readonly value: T) {}
 
-  unwrap(): T {
+  unwrap() {
     return this.value;
   }
 
-  unwrapOr() {
-    return this.unwrap()
+  unwrapOr(): T {
+    return this.unwrap();
   }
 
-  unwrapOrElse<V>(exp: () => V): V {
-    return exp()
+  unwrapOrElse() {
+      return this.unwrap();
   }
 };
 
@@ -47,5 +47,5 @@ export function some<T>(value: T): Option<T> {
 }
 
 export function none<T>(): Option<T> {
-  return new None();
+  return new None<T>();
 }
