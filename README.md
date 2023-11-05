@@ -1,71 +1,62 @@
-Rust's items for TypeScript
+Rust-like items for TypeScript
 
+Modules
+- **/**
+- **/common**
 
 ## Option\<T>
 
 ```ts
 const foo: Option<string> = some("some value");
-
 const bar: Option<string> = none();
-
 ```
 ## Match 
 
 ```ts
-match(targetValue, (targetValueAgain) => [ // returns array with match expression entries 
+match(targetValue, (targetValueAgain) => [
    [value1, () => do some ],
    [value2, () => do some ],
    [value3, () => do some ],
- ], (targetValueAlsoHere) => do default some )
+], (targetValueAlsoHere) => do default some)
 ```
 
 ```ts
-match<<Option<T>, string>(foo, (fooParameter) => [
-  [ some("baz"),  () => "returns if value is some('baz')" ],
-  
-  [ some("some value"), () => "here we go" ],
-
-  [ some(fooParameter.unwrapOrElse(() => "whatever")), () => "need to return string in any cases if generic type not exposed"  ],
-  
-  [ none(), () => "None wraps null and satisfies typechecker"  ],
-
-  [bar, () => "skipped expression"],
-
-], sameFooParameterForDefault => sameFooParameterForDefault.unwrap())
+match<<Option<T>, string>(foo, (fooValue) => [
+  [some(fooValue),  () => "hello"],
+  [none(), () => "None wraps null to satisfy typechecker"],
+], sameFooParameterForDefault => sameFooParameterForDefault)
 
 ```
-## if you want to force typescript don't check generic in Option\<T>
+## Enums
+
 ```ts
+const { None, Some } = Options;
+
 function testEnum(variant: Options) {
   variant() // call variant after to get value;
 }
 
-const { None, Some } = Options;
-
 testEnum(None); // typechecker happy
-testEnum( () => Some({a: 1}) ); // need to use another function to pass values to variant
-testEnum( variant( Some([1, 2, 3]) ) ); // or use variant() for the same purpose
+testEnum( () => Some({a: 1}) ); // if you need to pass value to variant then wrap it in another function
+testEnum( variant(Some([1, 2, 3]))); // or use variant() for the same purpose
 ```
 
-
-
-### How to cook a weak version of Rust's enums with TypeScript
-### Functions are the only worth things in JavaScript for my opinion
-
+### How to create Rust-like enum behavior with TypeScript
+Functions are the only worth things in JavaScript for my opinion
 
 ```ts
 class Options extends Function {
   static Some<T>(value: T) { return some(value) }
   static None<T>() { return none<T>() }
 
-  static Foo() { return Options.Foo.name } // If you need to store a string you don't care we may assign variant function name
+  static Foo() { return Options.Foo.name }
 }
 ```
+It's not perfect but more then less
 
 ## Expressions
 
-If you need chain some code and you too lazy to type (function() { ... })() and if you don't care about this context
-you may consider expression with arrow function  
+If you need chain some code and you too lazy to type (function() { ... })() andor whatever consider expression functions
 
 ```ts
 exp(() => {
@@ -76,23 +67,47 @@ exp(() => {
 
 exp((six) => {
 
-  const str66 = six.unwrap() + "6";
+  six.unwrap() + "6";
  
 }, some(6)) // exp() with Option<T> value
+```
 
+Imagine too long condition you need to reuse and also don't want to assign
 
-
-ifExp((con) => {  // imagine too long condition you need to reuse it and also don't want to store it in any variable
+```ts
+ifExp((con) => {
    if (con) {
      if (con && 2 + 2 === 4) {
-
+      // ...
      }
    }
+}, [{}, Object()] === "[object Object]" || 87 < 800 && Array.isArray(Function()) || !amIhungry
 
-}, [{}, Object()] === "[objec Object]" || 87 < 800 && Array.isArray(Function()) 
+```
+Check some few more other expression construction that might be useful
 
 
-conExp(() => {
-  return "return if truthy below"
-}, true)
+## Result<T, E> provides way to handle error or unknown causes
+  
+```ts
+function eq<T>(lhsValue: T, rhsValue: T): Result<EqResult<T>, boolean> {
+
+  const rsl = match(cmp(lhsValue, rhsValue), () => [
+    [1, () => true],
+    [-1, () => false]
+  ], () => false);
+  
+  return rsl ? ok({eq: rsl, lhs: lhsValue, rhs: lhsValue}) : err(rsl);
+}
+
+
+const result = eq("hello", "helo with typo");
+
+result.isOk() // false
+```
+
+## Nothing it's similar to empty unit () in Rust
+
+```ts
+const getMeSomeValue: Nothing = nothing();
 ```

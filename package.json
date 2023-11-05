@@ -1,14 +1,16 @@
 {
   "name": "@seacrest/rjs",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "module",
+  "author": "Valery Seacrest",
+  "license": {
+    "type" : "MIT",
+    "url" : "./License.md"
+  },
   "types": "./dist/lib.d.ts",
-  "license": "UNLICENSED",
   "main": "./dist/lib.umd.cjs",
   "module": "./dist/lib.js",
-  "files": [
-    "./dist/"
-  ],
+  "files": [ "./dist/" ],
   "exports": {
     ".": {
       "import": "./dist/lib.js",
@@ -22,8 +24,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "test": "npm run build && node ./dist/lib.umd.cjs",
-    "c": "tsc"
+    "test": "npm run build && node ./dist/lib.umd.cjs"
   },
   "devDependencies": {
     "typescript": "^5.0.2",
@@ -34,15 +35,19 @@
     "type": "git",
     "url": "https://github.com/seacrest-sx/rjs"
   },
-  "author": "Seacrest",
+  "bugs": {
+    "url": "https://github.com/seacrest-sx/rjs/issues"
+  },
   "keywords": [
+    "seacrest",
     "rjs",
+    "error",
+    "ok",
     "compare",
     "result",
-    "seacrest",
     "rust",
     "match",
-    "variants",
+    "variant",
     "enum",
     "option",
     "some",
