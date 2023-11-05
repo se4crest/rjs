@@ -1,24 +1,36 @@
-# Rust's items for TypeScript
+Rust's items for TypeScript
 
 
-## Option<T>
+## Option\<T>
+
 ```ts
-
 const foo: Option<string> = some("some value");
 
 const bar: Option<string> = none();
 
+```
+## Match 
 
-match(foo, (fooParameter) => [
+```ts
+match(targetValue, (targetValueAgain) => [ // returns array with match expression entries 
+   [value1, () => do some ],
+   [value2, () => do some ],
+   [value3, () => do some ],
+ ], (targetValueAlsoHere) => do default some )
+```
+
+```ts
+match<<Option<T>, string>(foo, (fooParameter) => [
   [ some("baz"),  () => "returns if value is some('baz')" ],
+  
+  [ some("some value"), () => "here we go" ],
 
-  [ some(fooParameter.unwrapOrElse(() => "whatever")), () => "value if mathes with some('baz')"  ],
+  [ some(fooParameter.unwrapOrElse(() => "whatever")), () => "need to return string in any cases if generic type not exposed"  ],
   
   [ none(), () => "None wraps null and satisfies typechecker"  ],
 
   [bar, () => "skipped expression"],
 
-  [some("some value"), () => "here we go"]
 ], sameFooParameterForDefault => sameFooParameterForDefault.unwrap())
 
 ```

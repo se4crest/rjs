@@ -14,7 +14,7 @@ export default defineConfig({
   },
   plugins: [
     dts({
-      exclude: ["src/test.ts", "src/main.ts"]
+      exclude: ["src/test.ts"]
     })
   ]
 });

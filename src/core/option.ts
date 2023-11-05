@@ -6,9 +6,9 @@ export interface Option<T> {
   unwrapOrElse(exp: () => any): any
 };
 
-class None<T> implements Option<any> {
+export class None<T> implements Option<any> {
   constructor(readonly value: T | any = {
-    __NULL__: {}
+    __NULL__: null
   }) {}
 
   unwrap() {
@@ -25,7 +25,7 @@ class None<T> implements Option<any> {
   
 };
 
-class Some<T> implements Option<T> {
+export class Some<T> implements Option<T> {
   constructor(readonly value: T) {}
 
   unwrap() {
@@ -33,7 +33,7 @@ class Some<T> implements Option<T> {
   }
 
   unwrapOr(): T {
-    return this.unwrap();
+    return this.value;
   }
 
   unwrapOrElse() {
