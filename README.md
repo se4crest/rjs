@@ -21,7 +21,7 @@ match(targetValue, (targetValueAgain) => [
 ```
 
 ```ts
-match<<Option<T>, string>(foo, (fooValue) => [
+match<<Option<string>, string>(foo, (fooValue) => [
   [some(fooValue),  () => "hello"],
   [none(), () => "None wraps null to satisfy typechecker"],
 ], sameFooParameterForDefault => sameFooParameterForDefault)
