@@ -6,8 +6,8 @@ export interface Result<T, E> {
   isErr(): boolean
   err(): Option<E>
   ok(): Option<T>
-  expect(message: string): T | never
-  expectErr(): E | never
+  expect(message: string): T | E
+  expectErr(): E | T
   unwrap(): T | E
   unwrapErr(): T | E
   unwrapOr<V>(value: V): V | T
@@ -41,8 +41,13 @@ export class Err<T, E> implements Result<T, E> {
     return none();
   }
 
-  expect(message: string): never {
-    throw new Error(message);
+  expect(message: string): E {
+    try {
+      throw new Error(message);
+    } catch (e) {
+      console.error(e);
+    }
+    return this.error.value as E
   }
 
   expectErr(): E {
