@@ -6,7 +6,13 @@ export interface Result<T, E> {
   isErr(): boolean
   err(): Option<E>
   ok(): Option<T>
+  expect(message: string): T | never
+  expectErr(): E | never
   unwrap(): T | E
+  unwrapErr(): T | E
+  unwrapOr<V>(value: V): V | T
+  unwrapOrElse<R>(exp:() => R): T | R
+  unwrapOrDefault<D>(exp:() => D): T | E | D
 };
 
 export class Err<T, E> implements Result<T, E> {
@@ -35,12 +41,32 @@ export class Err<T, E> implements Result<T, E> {
     return none();
   }
 
-  unwrap(): E {
+  expect(message: string): never {
+    throw new Error(message);
+  }
+
+  expectErr(): E {
+    return this.error.value as E;
+  }
+
+  unwrap(): never {
+    throw new Error(`Unwarp Error: ${this.error.value}`);
+  }
+
+  unwrapErr(): E {
     return this.error.value as E;
   }
 
   unwrapOr<V>(value: V): V {
     return value;
+  }
+
+  unwrapOrElse<R>(exp:() => R): R {
+    return exp();
+  }
+
+  unwrapOrDefault<D>(exp:() => D): D {
+    return exp();
   }
 };
 
@@ -61,7 +87,6 @@ export class Ok<T, E> implements Result<T, E> {
   isErr(): boolean {
     return !this.isOk();
   }
-
   
 
   err<E>(): Option<E> {
@@ -72,11 +97,31 @@ export class Ok<T, E> implements Result<T, E> {
     return some(this.unwrap());
   }
 
+  expect(_message: string): T {
+    return this.unwrap()
+  }
+
+  expectErr(): never {
+    throw new Error("Expect Err: it's okay");
+  }
+
   unwrap(): T {
     return this.okay.value as T;
   }
 
-  unwrapOr(): T {
+  unwrapErr(): never {
+    throw new Error("Unwrap Err: unwrap error when it's okay");
+  }
+
+  unwrapOr<V>(_value: V): T {
+    return this.unwrap();
+  }
+
+  unwrapOrElse<R>(_exp:() => R): T {
+    return this.unwrap();
+  }
+
+  unwrapOrDefault<D>(_exp:() => D): T {
     return this.unwrap();
   }
 };

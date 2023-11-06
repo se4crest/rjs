@@ -17,12 +17,3 @@ export function valExp<V, T>(expression: (value: V) => T, value: V) {
 export function ifExp<T>(expression: (condition: boolean) => T, condition: boolean) {
   return expression(condition);
 }
-
-
-export type Nothing = {}
-
-export function nothing(): Nothing {
-  return (function() {
-    return "Nothing" as Nothing;
-  })();
-}

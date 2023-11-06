@@ -94,7 +94,7 @@ export function eq<T>(lhsValue: T, rhsValue: T): Result<EqResult<T>, boolean> {
     [-1, () => false]
   ], () => false);
   
-  return rsl ? ok({eq: rsl, lhs: lhsValue, rhs: lhsValue}) : err(rsl);
+  return rsl ? ok({eq: rsl, lhs: lhsValue, rhs: rhsValue}) : err(rsl);
 }
 
 
