@@ -1,5 +1,7 @@
 Rust-like items for TypeScript
 
+[Update](#update)
+
 Modules
 - **/**
 - **/common**
@@ -10,7 +12,10 @@ Modules
 const foo: Option<string> = some("some value");
 const bar: Option<string> = none();
 ```
-## Match 
+## Match
+match() executes a function depending on comparison of values
+
+```match<V = unknown, M = unknown | unknown[], T = unknown>(value: V, armExpressions: (value: V) => Array<[(() => M[]) | M, () => T]>, defaultArmExp: (value: V) => T): T```
 
 ```ts
 match(targetValue, (targetValueAgain) => [
@@ -19,12 +24,24 @@ match(targetValue, (targetValueAgain) => [
    [value3, () => do some ],
 ], (targetValueAlsoHere) => do default some)
 ```
+Or group more values in one match expression (since 0.0.8)
+```ts
+const result = match(purge({dirty: some(null)} as PurgeOpts), () => [
+  [() => {}, () => "function"],
+  [() => [ null, {}, [], nothing() ], () => "objects or purged to Nothing"],
+  [{}, () => "object result"]
+], () => "other type");
+
+console.log(result); // objects or purged to Nothing
+```
 
 ```ts
-match<<Option<string>, string>(foo, (fooValue) => [
-  [some(fooValue),  () => "hello"],
+const result = match<<Option<string>, <Option<string>, string>(foo, (fooValue) => [
+  [some(fooValue),  () => fooValue],
   [none(), () => "None wraps null to satisfy typechecker"],
 ], sameFooParameterForDefault => sameFooParameterForDefault)
+
+console.log(result) // some value
 
 ```
 ## Enums
@@ -56,7 +73,7 @@ It's not perfect but more then less
 
 ## Expressions
 
-If you need chain some code and you too lazy to type (function() { ... })() andor whatever consider expression functions
+If you need chain some code and you too lazy to type ```(function() { ... })()``` and/or whatever, consider expression functions
 
 ```ts
 exp(() => {
@@ -72,7 +89,7 @@ exp((six) => {
 }, some(6)) // exp() with Option<T> value
 ```
 
-Imagine too long condition you need to reuse and also don't want to assign
+Imagine too long condition you need to reuse and also don't want to assign to a variable
 
 ```ts
 ifExp((con) => {
@@ -81,13 +98,29 @@ ifExp((con) => {
       // ...
      }
    }
-}, [{}, Object()] === "[object Object]" || 87 < 800 && Array.isArray(Function()) || !amIhungry
+}, [{}, Object] === "[object Object]" || 87 < 800 && Array.isArray(Function()) || !amIhungry
 
 ```
-Check some few more other expression construction that might be useful
+Check some few more other expression constructions that might be useful
 
 
-## Result<T, E> provides way to handle error or unknown causes
+## Result<T, E> provides a way to handle errors or unknown causes
+
+```
+Result<T, E> {
+  isOk(): boolean
+  isErr(): boolean
+  err(): Option<E>
+  ok(): Option<T>
+  expect(message: string): T | E
+  expectErr(): E | T
+  unwrap(): T | E
+  unwrapErr(): T | E
+  unwrapOr<V>(value: V): V | T
+  unwrapOrElse<R>(exp:() => R): T | R
+  unwrapOrDefault<D>(exp:() => D): T | E | D
+}
+```
   
 ```ts
 function eq<T>(lhsValue: T, rhsValue: T): Result<EqResult<T>, boolean> {
@@ -111,7 +144,24 @@ result.isOk() // false
 ```ts
 const getMeSomeValue: Nothing = nothing();
 ```
-Purge function
+Purge function returns Nothing type. Error option is true by default
 ```ts 
-purge(dirty: undefined | null | 0 | "" | {} | []): Nothing
+purge({dirty: Option<undefined | null>, empty: Option<0 | "" | {} | []>, error: boolean}: PurgeOpts): Nothing
 ```
+<br>
+<a id="update">CHANGELOG</a>
+
+#### 0.0.8 (November 10, 2023)
+
+## cmp
+ - fixed Rhs to Lhs as Lhs to Rhs
+ - optimized condition flow
+
+## match
+ - multi-value arm expression with single execution
+
+## result
+ - **unwrap** always returns a value of **ok** and **err**
+
+## purge
+ - updated function API

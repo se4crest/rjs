@@ -1,6 +1,6 @@
 {
   "name": "@seacrest/rjs",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "type": "module",
   "author": "Valery Seacrest",
   "license": {
@@ -10,7 +10,7 @@
   "types": "./dist/lib.d.ts",
   "main": "./dist/lib.umd.cjs",
   "module": "./dist/lib.js",
-  "files": [ "./dist/" ],
+  "files": [ "./dist/", "./changelog.md" ],
   "exports": {
     ".": {
       "import": "./dist/lib.js",
@@ -40,6 +40,8 @@
   },
   "keywords": [
     "seacrest",
+    "rust",
+    "rust js",
     "rjs",
     "error",
     "ok",
@@ -47,10 +49,9 @@
     "result",
     "rust",
     "match",
-    "variant",
+    "variants",
     "enum",
     "option",
-    "some",
-    "none"
+    "purge"
   ]
 }
