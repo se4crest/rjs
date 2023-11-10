@@ -13,7 +13,7 @@ export interface Result<T, E> {
   unwrapOr<V>(value: V): V | T
   unwrapOrElse<R>(exp:() => R): T | R
   unwrapOrDefault<D>(exp:() => D): T | E | D
-};
+}
 
 export class Err<T, E> implements Result<T, E> {
   error: { value: E | Nothing, result: boolean } = {
@@ -47,15 +47,16 @@ export class Err<T, E> implements Result<T, E> {
     } catch (e) {
       console.error(e);
     }
-    return this.error.value as E
+
+    return this.error.value as E;
   }
 
   expectErr(): E {
     return this.error.value as E;
   }
 
-  unwrap(): never {
-    throw new Error(`Unwarp Error: ${this.error.value}`);
+  unwrap(): E {
+    return this.error.value as E;
   }
 
   unwrapErr(): E {
@@ -106,8 +107,14 @@ export class Ok<T, E> implements Result<T, E> {
     return this.unwrap()
   }
 
-  expectErr(): never {
-    throw new Error("Expect Err: it's okay");
+  expectErr(): T {
+    try {
+      throw new Error("Expect Err: it's okay");
+    } catch (e) {
+      console.log(e);
+    }
+    
+    return this.okay.value as T
   }
 
   unwrap(): T {
