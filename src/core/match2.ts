@@ -1,4 +1,5 @@
-import { cmp } from "./eq";
+
+import { cmp } from "..";
 import { Some,  } from "./option";
 import { Ok, Err,  } from "./result";
 

@@ -4,6 +4,6 @@ export * from "./core";
 
 
 
-match(null, () => [
-  [null, () => console.log("okay [ ]")],
+match([], () => [
+  [{}, () => console.log("okay [ ]")],
 ], () => console.log("default hello"))

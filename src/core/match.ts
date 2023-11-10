@@ -21,12 +21,12 @@ export function match<V, T>(value: V, expression: (value: V) => Array<[unknown, 
 
 
 export function matchExp<T, R>(lhsValue: T, rhsValue: T, exec: (result: 1 | 0 | -1, lhs: T, rhs: T) => R): R {
-  const rsl = compare(lhsValue, rhsValue);
+  const rsl = cmp(lhsValue, rhsValue);
   
   return exec(rsl, lhsValue, rhsValue);
 }
 
-export function compare<T>(lhsValue: T, rhsValue: T): 1 | 0 | -1 {
+export function cmp<T>(lhsValue: T, rhsValue: T): 1 | 0 | -1 {
   if (typeof lhsValue !== typeof rhsValue) return 0;
   
   if (typeof lhsValue === "function" && typeof rhsValue === "function") {
@@ -56,7 +56,7 @@ export function compare<T>(lhsValue: T, rhsValue: T): 1 | 0 | -1 {
             if (lhsValue.length === 0 && rhsValue.length === 0) {
               return 1;
             } else {
-              const matchedTimes: number = lhsValue.reduce<number>((tot, cur, i) => tot + compare(cur, rhsValue[i]), 0);
+              const matchedTimes: number = lhsValue.reduce<number>((tot, cur, i) => tot + cmp(cur, rhsValue[i]), 0);
               
               return matchedTimes === rhsValue.length ? 1 : -1;
             }
@@ -74,10 +74,10 @@ export function compare<T>(lhsValue: T, rhsValue: T): 1 | 0 | -1 {
             }
 
             if (lhsValue instanceof Map && rhsValue instanceof Map || lhsValue instanceof Set && rhsValue instanceof Map ) {
-              return compare(Array.from(lhsValue.entries()), Array.from(rhsValue.entries()));
+              return cmp(Array.from(lhsValue.entries()), Array.from(rhsValue.entries()));
             }
             if (lhsValue instanceof Date && rhsValue instanceof Date) {
-              return compare(lhsValue.getDate(), rhsValue.getDate());
+              return cmp(lhsValue.getDate(), rhsValue.getDate());
             }
           
             const lhsKeys = Object.keys(lhsValue!);
@@ -87,7 +87,7 @@ export function compare<T>(lhsValue: T, rhsValue: T): 1 | 0 | -1 {
               return 1;
             }
 
-            const matchedKeysTimes = lhsKeys.reduce((tot, cur, i) => tot + compare(cur, rhsKeys[i]), 0);
+            const matchedKeysTimes = lhsKeys.reduce((tot, cur, i) => tot + cmp(cur, rhsKeys[i]), 0);
 
             if (matchedKeysTimes !== rhsKeys.length) {
               return -1
@@ -96,7 +96,7 @@ export function compare<T>(lhsValue: T, rhsValue: T): 1 | 0 | -1 {
             const lhsValues = Object.values(lhsValue!);
             const rhsValues = Object.values(rhsValue!);
             
-            const matchedValuesTimes: number = lhsValues.reduce((tot, cur, i) => tot + compare(cur, rhsValues[i]), 0);
+            const matchedValuesTimes: number = lhsValues.reduce((tot, cur, i) => tot + cmp(cur, rhsValues[i]), 0);
             
             return matchedValuesTimes === rhsValues.length ? 1 : -1;
         }
