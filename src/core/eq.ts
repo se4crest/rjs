@@ -1,6 +1,6 @@
-// import { Result, err, ok } from "./result";
+import { Result, err, ok } from "./result";
 import { exp,} from "./expressions";
-// import { match } from "./match";
+import { match } from "./match";
 
 export function cmp<T>(lhsValue: T, rhsValue: T): 1 | 0 | -1 {
   if (typeof lhsValue !== typeof rhsValue) return 0;
@@ -81,15 +81,15 @@ export function cmp<T>(lhsValue: T, rhsValue: T): 1 | 0 | -1 {
 export type EqResult<T> = {eq: boolean, lhs: T, rhs: T}
 
 
-// export function eq<T>(lhsValue: T, rhsValue: T): Result<EqResult<T>, boolean> {
+export function eq<T>(lhsValue: T, rhsValue: T): Result<EqResult<T>, boolean> {
 
-//   const rsl = match(cmp(lhsValue, rhsValue), () => [
-//     [1, () => true],
-//     [-1, () => false]
-//   ], () => false);
+  const rsl = match(cmp(lhsValue, rhsValue), () => [
+    [1, () => true],
+    [-1, () => false]
+  ], () => false);
   
-//   return rsl ? ok({eq: rsl, lhs: lhsValue, rhs: rhsValue}) : err(rsl);
-// }
+  return rsl ? ok({eq: rsl, lhs: lhsValue, rhs: rhsValue}) : err(rsl);
+}
 
 
 
