@@ -1,6 +1,6 @@
 {
   "name": "@seacrest/rjs",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "type": "module",
   "author": "Valery Seacrest",
   "license": {
@@ -41,7 +41,7 @@
   "keywords": [
     "seacrest",
     "rust",
-    "rust js",
+    "rust-like js",
     "rjs",
     "error",
     "ok",
@@ -50,7 +50,6 @@
     "rust",
     "match",
     "variants",
-    "enum",
     "option",
     "purge",
     "branch"

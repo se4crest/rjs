@@ -159,6 +159,11 @@ purge({dirty: Option<undefined | null>, empty: Option<0 | "" | {} | []>, error: 
 <br>
 <a id="changelog">CHANGELOG</a>
 
+# 0.0.9 (November 11, 2023)
+
+## branch
+ - added **branch** function as shorthand version of match
+
 #### 0.0.8 (November 10, 2023)
 
 ## cmp
