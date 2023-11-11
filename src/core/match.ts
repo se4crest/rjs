@@ -19,6 +19,16 @@ export function match<V = unknown, M = unknown | unknown[], T = unknown>(value: 
 }
 
 
+export function branch<V = unknown, B = unknown, T = unknown>(value: V, expression: (value: V) => [...B[], () => T], defaultExpression: (value: V) => T) {
+  const lhsValue = unwrap(value);
+  const match = expression(unwrap(lhsValue));
+
+  const result = match.filter((rhsValue, i, arr) => i !== arr.length - 1 && matchExp(value, rhsValue as B | V , (result) => result === 1));
+
+  return result.length > 0 ? (match.at(-1) as () => T)() : defaultExpression(lhsValue);
+} 
+
+
 export function matchExp<T, R>(lhsValue: T, rhsValue: T, exec: (result: 1 | 0 | -1, lhs: T, rhs: T) => R): R {
   const rsl = cmp(lhsValue, rhsValue);
   

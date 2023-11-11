@@ -44,6 +44,14 @@ const result = match<<Option<string>, <Option<string>, string>(foo, (fooValue) =
 console.log(result) // some value
 
 ```
+## Branch
+branch() it's like match() with the only two possible outputs - when it matches or it does not.
+Consider branch function like extended version of ternary operator.
+```branch(value, (v) => [...values, () => {...possible execution}], (v) => {...default execution})```
+
+```ts
+branch(ok("foo"), (v) => ["foo", "baz", ok(v), () => console.log("baz or " + v)], (e) => err(e).expect("bar!!!"));
+```
 ## Enums
 
 ```ts
