@@ -1,6 +1,6 @@
 Rust-like items for TypeScript
 
-[Update](#update)
+[CHANGELOG](#changelog)
 
 Modules
 - **/**
@@ -45,9 +45,9 @@ console.log(result) // some value
 
 ```
 ## Branch
-branch() it's like match() with the only two possible outputs - when it matches or it does not.
+**branch** it's kind of **match** with the only two possible outputs - when it matches or it does not.
 Consider branch function like extended version of ternary operator.
-```branch(value, (v) => [...values, () => {...possible execution}], (v) => {...default execution})```
+```branch(value, (v) => [...values to match, () => {...possible execution}], (v) => {...default execution})```
 
 ```ts
 branch(ok("foo"), (v) => ["foo", "baz", ok(v), () => console.log("baz or " + v)], (e) => err(e).expect("bar!!!"));
@@ -61,8 +61,8 @@ function testEnum(variant: Options) {
   variant() // call variant after to get value;
 }
 
-testEnum(None); // typechecker happy
-testEnum( () => Some({a: 1}) ); // if you need to pass value to variant then wrap it in another function
+testEnum(None); // typechecker is happy
+testEnum( () => Some({a: 1}) ); // if you need to pass a value to variant then wrap it in another function
 testEnum( variant(Some([1, 2, 3]))); // or use variant() for the same purpose
 ```
 
@@ -112,7 +112,7 @@ ifExp((con) => {
 Check some few more other expression constructions that might be useful
 
 
-## Result<T, E> provides a way to handle errors or unknown causes
+## Result<T, E> provides a way to handle errors and unknown causes
 
 ```
 Result<T, E> {
@@ -147,17 +147,17 @@ const result = eq("hello", "helo with typo");
 result.isOk() // false
 ```
 
-## Nothing it's similar to empty unit () in Rust
+## ***Nothing*** it's similar to empty unit ***()*** in Rust
 
 ```ts
 const getMeSomeValue: Nothing = nothing();
 ```
-Purge function returns Nothing type. Error option is true by default
+**purge** function returns ***Nothing*** type. **error** option is true by default
 ```ts 
 purge({dirty: Option<undefined | null>, empty: Option<0 | "" | {} | []>, error: boolean}: PurgeOpts): Nothing
 ```
 <br>
-<a id="update">CHANGELOG</a>
+<a id="changelog">CHANGELOG</a>
 
 #### 0.0.8 (November 10, 2023)
 
