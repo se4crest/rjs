@@ -46,7 +46,7 @@ console.log(result) // some value
 ```
 ## Branch
 **branch** it's kind of **match** with the only two possible outputs - when it matches or it does not.
-Consider branch function like extended version of ternary operator.
+Consider branch function like extended version of ternary operator.<br>
 ```branch(value, (v) => [...values to match, () => {...possible execution}], (v) => {...default execution})```
 
 ```ts
@@ -105,6 +105,7 @@ function testEnumWithDefaultGeneric(value: MyEnum) {
 testEnumWithGeneric(MyEnum.Bar(function(){}))
 
 testEnumWithDefaultGeneric(MyEnum.Foo())
+```
 
 ## Expressions
 
