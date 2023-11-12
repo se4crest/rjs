@@ -77,7 +77,34 @@ class Options extends Function {
   static Foo() { return Options.Foo.name }
 }
 ```
-It's not perfect but more then less
+
+Another approach with generics. And it's a bit boilerplate.
+As an option you might implement ***Enum\<T>*** to force to have public readonly field **variant** and also for clarity
+```ts
+class MyEnum<T = string> implements Enum<T> {
+  constructor(readonly variant: T) {}
+
+  static Foo(): MyEnum {
+    return new MyEnum(MyEnum.Foo.name);
+  }
+
+  static Bar<V>(value: V): MyEnum<V> {
+    return new MyEnum(value);
+  }
+}
+
+
+function testEnumWithGeneric(value: MyEnum<Object>) {
+  value.variant
+}
+
+function testEnumWithDefaultGeneric(value: MyEnum) {
+  value.variant
+}
+
+testEnumWithGeneric(MyEnum.Bar(function(){}))
+
+testEnumWithDefaultGeneric(MyEnum.Foo())
 
 ## Expressions
 
