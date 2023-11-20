@@ -1,13 +1,13 @@
 {
   "name": "@seacrest/rjs",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "type": "module",
   "author": "Valery Seacrest",
   "license": {
     "type" : "MIT",
     "url" : "./License.md"
   },
-  "types": "./dist/lib.d.ts",
+  "types": "./dist/index.d.ts",
   "main": "./dist/lib.umd.cjs",
   "module": "./dist/lib.js",
   "files": [ "./dist/", "./changelog.md" ],
