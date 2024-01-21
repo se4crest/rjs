@@ -2,14 +2,12 @@ import { cmp } from "./cmp";
 import { Some } from "./option";
 import { Ok, Err } from "./result";
 
-export function match<V = unknown, M = unknown | unknown[], T = unknown>(value: V, armExpressions: (value: V) => Array<[(() => M[]) | M, () => T]>, defaultArmExp: (value: V) => T): T {
+export function match<V = unknown, T = unknown>(value: V, armExpressions: (value: V) => Array<[V, () => T]>, defaultArmExp: (value: V) => T): T {
 
   const lhsValue = unwrap(value);
   
   const found = armExpressions(lhsValue)
-    .map(([m, x]) => typeof m === "function" && Array.isArray((m as () => M[])()) ? (m as () => M[])().map(m => [m, x]) : [[m, x]])
-    .flatMap(arm => arm)  
-    .find(([rhsValue]) => matchExp(value, rhsValue as M | V , (result) => result === 1));
+    .find(([rhsValue]) => matchExp(value, rhsValue, (result) => result === 1));
 
   if (Array.isArray(found)) {
     return (found[1] as () => T)();
@@ -28,6 +26,9 @@ export function branch<V = unknown, B = unknown, T = unknown>(value: V, expressi
   return result.length > 0 ? (match.at(-1) as () => T)() : defaultExpression(lhsValue);
 } 
 
+export function armExp<V = unknown, T = unknown>(ls: V[], exp: () => T): Array<[V, () => T]> {
+  return ls.map(elt => [elt, exp]);
+}
 
 export function matchExp<T, R>(lhsValue: T, rhsValue: T, exec: (result: 1 | 0 | -1, lhs: T, rhs: T) => R): R {
   const rsl = cmp(lhsValue, rhsValue);

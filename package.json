@@ -1,6 +1,6 @@
 {
   "name": "@seacrest/rjs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "author": "Valery Seacrest",
   "license": {
@@ -25,6 +25,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "test": "npm run build && node ./dist/lib.umd.cjs"
+
   },
   "devDependencies": {
     "typescript": "^5.0.2",
