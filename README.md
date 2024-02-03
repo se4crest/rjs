@@ -6,37 +6,72 @@ Modules
 - **/**
 - **/common**
 
-## Option\<T>
+## Option\<T> type with possible absent value
+
+```
+Option<T> {
+  unwrap(): T
+  unwrapOr(value: any): T
+  unwrapOrElse(exp: () => any): any
+};
+```
 
 ```ts
 const foo: Option<string> = some("some value");
 const bar: Option<string> = none();
 ```
+
+## Result<T, E> provides a way to handle errors and unknown causes
+
+```
+Result<T, E> {
+  isOk(): boolean
+  isErr(): boolean
+  err(): Option<E>
+  ok(): Option<T>
+  expect(message: string): T | E
+  expectErr(): E | T
+  unwrap(): T | E
+  unwrapErr(): T | E
+  unwrapOr<V>(value: V): V | T
+  unwrapOrElse<R>(exp:() => R): T | R
+  unwrapOrDefault<D>(exp:() => D): T | E | D
+}
+```
+  
+```ts
+function eq<T>(lhsValue: T, rhsValue: T): Result<EqResult<T>, boolean> {
+
+  const rsl = match(cmp(lhsValue, rhsValue), () => [
+    [1, () => true],
+    [-1, () => false]
+  ], () => false);
+  
+  return rsl ? ok({eq: rsl, lhs: lhsValue, rhs: rhsValue}) : err(rsl);
+}
+
+
+const result = eq("hello", "helo with typo");
+
+result.isOk() // false
+```
+
 ## Match
-match() executes a function depending on comparison of values
 
-```match<V = unknown, M = unknown | unknown[], T = unknown>(value: V, armExpressions: (value: V) => Array<[(() => M[]) | M, () => T]>, defaultArmExp: (value: V) => T): T```
+```match<V, T>(value: V, armExp: (value: V | ReturnType<typeof unwrap>) => Array<[V, () => T]>, defaultArmExp: (value: V | ReturnType<typeof unwrap>) => T): T```
 
 ```ts
-match(targetValue, (targetValueAgain) => [
-   [value1, () => do some ],
-   [value2, () => do some ],
-   [value3, () => do some ],
-], (targetValueAlsoHere) => do default some)
-```
-Or group more values in one match expression (since 0.0.8)
-```ts
-const result = match(purge({dirty: some(null)} as PurgeOpts), () => [
-  [() => {}, () => "function"],
-  [() => [ null, {}, [], nothing() ], () => "objects or purged to Nothing"],
-  [{}, () => "object result"]
-], () => "other type");
+match(targetValue, (targetValueAlsoHere) => [
+   [value 1, () => do some ],
+   [value 2, () => do some ],
+   [value 3, () => do some ],
+   ...matchGroup([value 7, value 8, value 9], () => do some for all and spread it)
+], (targetValueAlsoHere) => default some)
 
-console.log(result); // objects or purged to Nothing
 ```
 
 ```ts
-const result = match<<Option<string>, <Option<string>, string>(foo, (fooValue) => [
+const result = match<<Option<string>, string>(foo, (fooValue) => [
   [some(fooValue),  () => fooValue],
   [none(), () => "None wraps null to satisfy typechecker"],
 ], sameFooParameterForDefault => sameFooParameterForDefault)
@@ -45,8 +80,7 @@ console.log(result) // some value
 
 ```
 ## Branch
-**branch** it's kind of **match** with the only two possible outputs - when it matches or it does not.
-Consider branch function like extended version of ternary operator.<br>
+It's the same **match** and consider branch function like extended version of ternary operator.<br>
 ```branch(value, (v) => [...values to match, () => {...possible execution}], (v) => {...default execution})```
 
 ```ts
@@ -67,7 +101,6 @@ testEnum( variant(Some([1, 2, 3]))); // or use variant() for the same purpose
 ```
 
 ### How to create Rust-like enum behavior with TypeScript
-Functions are the only worth things in JavaScript for my opinion
 
 ```ts
 class Options extends Function {
@@ -109,7 +142,7 @@ testEnumWithDefaultGeneric(MyEnum.Foo())
 
 ## Expressions
 
-If you need chain some code and you too lazy to type ```(function() { ... })()``` and/or whatever, consider expression functions
+If you need chain some code and you don't want to write ```(function() { ... })()``` consider expression functions
 
 ```ts
 exp(() => {
@@ -125,7 +158,7 @@ exp((six) => {
 }, some(6)) // exp() with Option<T> value
 ```
 
-Imagine too long condition you need to reuse and also don't want to assign to a variable
+Imagine too long condition you need to reuse and also don't want to create another variable for it 
 
 ```ts
 ifExp((con) => {
@@ -137,55 +170,34 @@ ifExp((con) => {
 }, [{}, Object] === "[object Object]" || 87 < 800 && Array.isArray(Function()) || !amIhungry
 
 ```
-Check some few more other expression constructions that might be useful
+Check some more other expression constructions that might be useful
 
 
-## Result<T, E> provides a way to handle errors and unknown causes
-
-```
-Result<T, E> {
-  isOk(): boolean
-  isErr(): boolean
-  err(): Option<E>
-  ok(): Option<T>
-  expect(message: string): T | E
-  expectErr(): E | T
-  unwrap(): T | E
-  unwrapErr(): T | E
-  unwrapOr<V>(value: V): V | T
-  unwrapOrElse<R>(exp:() => R): T | R
-  unwrapOrDefault<D>(exp:() => D): T | E | D
-}
-```
-  
-```ts
-function eq<T>(lhsValue: T, rhsValue: T): Result<EqResult<T>, boolean> {
-
-  const rsl = match(cmp(lhsValue, rhsValue), () => [
-    [1, () => true],
-    [-1, () => false]
-  ], () => false);
-  
-  return rsl ? ok({eq: rsl, lhs: lhsValue, rhs: rhsValue}) : err(rsl);
-}
-
-
-const result = eq("hello", "helo with typo");
-
-result.isOk() // false
-```
-
-## ***Nothing*** it's similar to empty unit ***()*** in Rust
+## ***Nothing*** it's sort of empty unit ***()*** in Rust
 
 ```ts
 const getMeSomeValue: Nothing = nothing();
 ```
-**purge** function returns ***Nothing*** type. **error** option is true by default
-```ts 
-purge({dirty: Option<undefined | null>, empty: Option<0 | "" | {} | []>, error: boolean}: PurgeOpts): Nothing
+
+Or create ***Nothing*** in from null, undefined etc
+
+```ts
+const x: Nothing = Nothig.from(value: NothingKind);
+```
+
+```
+NothingKind {
+  dirty: Option<undefined | null>
+  empty: Option<0 | "" | {} | []>
+  error: boolean // true by default
+}
 ```
 <br>
 <a id="changelog">CHANGELOG</a>
+
+# 0.1.1 (February 3, 2024)
+replace **purge** with ***Nothing*** API
+**matchGroup** for matching more than one value
 
 # 0.0.9 (November 11, 2023)
 

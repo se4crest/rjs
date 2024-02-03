@@ -4,7 +4,7 @@ export function exp<T, C>(expression: (value: Option<C>) => T, condition: Option
   return expression(condition);
 }
 
-export function conExp<T>(expression: () => T, condition: boolean) {
+export function condExp<T>(expression: () => T, condition: boolean) {
   if (condition) {
     return expression();
   }

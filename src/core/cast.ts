@@ -21,10 +21,10 @@ export class Nothing {
     nothing() : exp(() => {
 
       if (error) {
-        const output = err(match<Option<undefined | null> | Option<0 | "" | {} | []>>(none<Option<undefined | null> | Option<0 | "" | {} | []>>(), () => [
+        const output = err(match<Option<undefined | null> | Option<0 | "" | {} | []>, Nothing>(none<Option<undefined | null> | Option<0 | "" | {} | []>>(), () => [
           [dirty, () => e],
           [empty, () => d]
-        ], () => `${d}, ${e}`)).expect("Value is not dirty or empty");
+        ], () => `${d}, ${e}`)).expect("Value not dirty or empty");
     
         console.log(output);
       }

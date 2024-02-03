@@ -2,31 +2,31 @@ import { cmp } from "./cmp";
 import { Some } from "./option";
 import { Ok, Err } from "./result";
 
-export function match<V = unknown, T = unknown>(value: V, armExpressions: (value: V) => Array<[V, () => T]>, defaultArmExp: (value: V) => T): T {
+export function match<V, T>(value: V, armExp: (value: V | ReturnType<typeof unwrap>) => Array<[V, () => T]>, defaultArmExp: (value: V | ReturnType<typeof unwrap>) => T): T {
 
   const lhsValue = unwrap(value);
   
-  const found = armExpressions(lhsValue)
+  const found = armExp(lhsValue)
     .find(([rhsValue]) => matchExp(value, rhsValue, (result) => result === 1));
 
   if (Array.isArray(found)) {
-    return (found[1] as () => T)();
+    return found[1]();
   }
 
   return defaultArmExp(lhsValue);
 }
 
 
-export function branch<V = unknown, B = unknown, T = unknown>(value: V, expression: (value: V) => [...B[], () => T], defaultExpression: (value: V) => T) {
+export function branch<V, B, T>(value: V, exp: (value: V | ReturnType<typeof unwrap>) => [...B[], () => T], defaultExp: (value: V | ReturnType<typeof unwrap>) => T) {
   const lhsValue = unwrap(value);
-  const match = expression(unwrap(lhsValue));
+  const match = exp(unwrap(lhsValue));
 
   const result = match.filter((rhsValue, i, arr) => i !== arr.length - 1 && matchExp(value, rhsValue as B | V , (result) => result === 1));
 
-  return result.length > 0 ? (match.at(-1) as () => T)() : defaultExpression(lhsValue);
+  return result.length > 0 ? (match.at(-1) as () => T)() : defaultExp(lhsValue);
 } 
 
-export function armExp<V = unknown, T = unknown>(ls: V[], exp: () => T): Array<[V, () => T]> {
+export function matchGroup<V, T>(ls: V[], exp: () => T): Array<[V, () => T]> {
   return ls.map(elt => [elt, exp]);
 }
 
