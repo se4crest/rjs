@@ -34,13 +34,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/seacrest-sx/rjs"
+    "url": "https://github.com/seacrst/rjs"
   },
   "bugs": {
-    "url": "https://github.com/seacrest-sx/rjs/issues"
+    "url": "https://github.com/seacrst/rjs/issues"
   },
   "keywords": [
     "seacrest",
+    "javascript rust",
+    "js rust",
     "rust",
     "rust-like js",
     "rjs",
@@ -52,7 +54,7 @@
     "match",
     "variants",
     "option",
-    "purge",
-    "branch"
+    "branch",
+    "nothing"
   ]
 }
